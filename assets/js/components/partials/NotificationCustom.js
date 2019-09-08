@@ -1,9 +1,4 @@
 import React, {Component} from 'react'
-import {
-  Toast,
-  ToastHeader,
-  ToastBody
-} from 'reactstrap'
 import {capitalize} from 'lodash'
 
 export default class NotificationCustom extends Component {
@@ -32,20 +27,20 @@ export default class NotificationCustom extends Component {
         typeClass = 'fa-check-circle'
         break
     }
-    return (<i className={typeClass} />)
+    return (<i className={'fa fa-fw ' + typeClass} />)
   }
 
   render() {
     let {type, message} = this.props
     return (
-      <Toast>
-        <ToastHeader icon={this.iconType()}>
-          {capitalize(type)}
-        </ToastHeader>
-        <ToastBody>
+      <div className={'alert alert-' + type + ' w-100 mb-0 border-0'}>
+        <h4 className='alert-heading'>
+          {this.iconType()} {capitalize(type)}
+        </h4>
+        <p className='m-0'>
           {message}
-        </ToastBody>
-      </Toast>
+        </p>
+      </div>
     )
   }
 }

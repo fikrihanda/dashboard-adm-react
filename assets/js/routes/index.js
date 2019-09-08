@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Switch, Route, withRouter} from 'react-router'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {has} from 'lodash'
 import {checkSession} from '@/js/actions/session'
 import Content from '@/js/components/Content'
 import routes from '@/js/routes/route'
@@ -20,7 +21,7 @@ class Routes extends Component {
 
   static routesMap() {
     return routes.map((r, i) => (
-      <Route path={r.path} component={r.component} exact key={'routes' + i}/>
+      <Route path={r.path} component={r.component} exact={has(r, 'exact') ? r.exact : false} key={'routes' + i}/>
     ))
   }
 
@@ -35,12 +36,15 @@ class Routes extends Component {
   }
 
   async componentDidMount() {
-    await this.onRouteChange(location)
+    await this.onRouteChange()
     this.setLayout()
-    this.props.history.listen(async (location) => {
-      await this.onRouteChange(location)
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      await this.onRouteChange()
       this.setLayout()
-    })
+    }
   }
 
   setLayout() {
